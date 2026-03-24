@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SILAR — Sistem Inovasi Limbah Organik</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-deep: #1a3a2a;
+    --green-mid: #2d6a4f;
+    --green-bright: #52b788;
+    --green-light: #95d5b2;
+    --lime: #b7e4c7;
+    --cream: #f8f4ec;
+    --earth: #a67c52;
+    --earth-light: #d4a96a;
+    --dark: #0d1f17;
+    --text: #1a2e22;
+    --text-muted: #4a6358;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--cream); }
+  ::-webkit-scrollbar-thumb { background: var(--green-bright); border-radius: 3px; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 5%;
+    background: rgba(248,244,236,0.88);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(82,183,136,0.2);
+    transition: all 0.3s;
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem; font-weight: 800;
+    color: var(--green-mid);
+    letter-spacing: -1px;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .nav-logo span { color: var(--earth); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.9rem; font-weight: 500; color: var(--text-muted);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--green-mid); }
+  .nav-cta {
+    background: var(--green-mid); color: white;
+    padding: 0.6rem 1.4rem; border-radius: 50px;
+    font-size: 0.9rem; font-weight: 500;
+    text-decoration: none; transition: all 0.25s;
+    border: 2px solid transparent;
+  }
+  .nav-cta:hover { background: transparent; color: var(--green-mid); border-color: var(--green-mid); }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 8rem 5% 4rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 30%, rgba(82,183,136,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 20% 80%, rgba(166,124,82,0.12) 0%, transparent 60%),
+      var(--cream);
+  }
+  .hero-circles {
+    position: absolute; top: 10%; right: 5%;
+    width: 420px; height: 420px; z-index: 0;
+  }
+  .hero-circles circle { transition: all 1s; }
+  .hero-content { position: relative; z-index: 1; max-width: 700px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(82,183,136,0.15); border: 1px solid rgba(82,183,136,0.4);
+    padding: 0.4rem 1rem; border-radius: 50px;
+    font-size: 0.8rem; font-weight: 500; color: var(--green-mid);
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-badge::before { content: '♻'; font-size: 1rem; }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 800; line-height: 1.05;
+    letter-spacing: -2px;
+    color: var(--dark);
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s ease 0.1s both;
+  }
+  h1 em { font-style: normal; color: var(--green-mid); }
+  h1 .earth { color: var(--earth); }
+  .hero-desc {
+    font-size: 1.1rem; line-height: 1.7; color: var(--text-muted);
+    max-width: 560px; margin-bottom: 2.5rem;
+    font-weight: 300;
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+  .hero-actions {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    animation: fadeUp 0.8s ease 0.3s both;
+  }
+  .btn-primary {
+    background: var(--green-mid); color: white;
+    padding: 0.9rem 2rem; border-radius: 50px;
+    font-size: 1rem; font-weight: 500;
+    text-decoration: none; transition: all 0.25s;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    box-shadow: 0 4px 20px rgba(45,106,79,0.3);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(45,106,79,0.4); }
+  .btn-secondary {
+    background: transparent; color: var(--green-mid);
+    padding: 0.9rem 2rem; border-radius: 50px;
+    font-size: 1rem; font-weight: 500;
+    text-decoration: none; transition: all 0.25s;
+    border: 2px solid var(--green-mid);
+    display: inline-flex; align-items: center; gap: 0.5rem;
+  }
+  .btn-secondary:hover { background: var(--green-mid); color: white; }
+
+  .hero-stats {
+    display: flex; gap: 3rem; margin-top: 4rem;
+    animation: fadeUp 0.8s ease 0.4s both;
+  }
+  .stat { border-left: 3px solid var(--green-bright); padding-left: 1rem; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem; font-weight: 800; color: var(--green-mid);
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+  /* ─── SECTION COMMON ─── */
+  section { padding: 6rem 5%; }
+  .section-tag {
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--green-bright);
+    margin-bottom: 0.8rem;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800; letter-spacing: -1px;
+    color: var(--dark); line-height: 1.1;
+    margin-bottom: 1.2rem;
+  }
+  .section-desc {
+    font-size: 1rem; line-height: 1.7;
+    color: var(--text-muted); max-width: 560px;
+    font-weight: 300;
+  }
+
+  /* ─── HOW IT WORKS ─── */
+  #how {
+    background: var(--green-deep);
+    color: white;
+  }
+  #how .section-tag { color: var(--green-light); }
+  #how .section-title { color: white; }
+  #how .section-desc { color: rgba(255,255,255,0.6); }
+  .steps {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem; margin-top: 4rem;
+  }
+  .step {
+    position: relative;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(82,183,136,0.2);
+    border-radius: 20px; padding: 2rem;
+    transition: all 0.3s;
+    overflow: hidden;
+  }
+  .step::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(82,183,136,0.1), transparent 70%);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .step:hover::before { opacity: 1; }
+  .step:hover { transform: translateY(-4px); border-color: rgba(82,183,136,0.5); }
+  .step-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 3.5rem; font-weight: 800;
+    color: rgba(82,183,136,0.2); line-height: 1;
+    margin-bottom: 1rem;
+  }
+  .step-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .step h3 { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.6rem; }
+  .step p { font-size: 0.9rem; color: rgba(255,255,255,0.6); line-height: 1.6; }
+
+  /* ─── PRODUCTS ─── */
+  #products { background: var(--cream); }
+  .products-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem; margin-top: 3.5rem;
+  }
+  .product-card {
+    background: white; border-radius: 24px;
+    padding: 2rem; transition: all 0.35s;
+    border: 1px solid rgba(0,0,0,0.06);
+    position: relative; overflow: hidden;
+  }
+  .product-card::after {
+    content: ''; position: absolute;
+    bottom: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--green-bright), var(--earth-light));
+    transform: scaleX(0); transition: transform 0.3s;
+  }
+  .product-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+  .product-card:hover::after { transform: scaleX(1); }
+  .product-emoji { font-size: 3rem; margin-bottom: 1rem; }
+  .product-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem; font-weight: 700;
+    color: var(--dark); margin-bottom: 0.5rem;
+  }
+  .product-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+  .product-tag {
+    display: inline-block;
+    background: rgba(82,183,136,0.12); color: var(--green-mid);
+    padding: 0.25rem 0.75rem; border-radius: 50px;
+    font-size: 0.75rem; font-weight: 600;
+    margin-top: 1rem;
+  }
+
+  /* ─── CUSTOMERS ─── */
+  #customers {
+    background: linear-gradient(135deg, var(--green-mid) 0%, var(--green-deep) 100%);
+    color: white;
+  }
+  #customers .section-tag { color: var(--lime); }
+  #customers .section-title { color: white; }
+  .customers-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem; margin-top: 3rem;
+  }
+  .customer-card {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px; padding: 1.8rem;
+    text-align: center; transition: all 0.3s;
+    backdrop-filter: blur(10px);
+  }
+  .customer-card:hover {
+    background: rgba(255,255,255,0.18);
+    transform: scale(1.03);
+  }
+  .customer-icon { font-size: 2.8rem; margin-bottom: 0.8rem; }
+  .customer-card h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .customer-card p { font-size: 0.85rem; color: rgba(255,255,255,0.65); }
+
+  /* ─── PARTNERS ─── */
+  #partners { background: var(--cream); }
+  .partners-cols {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 2rem; margin-top: 3rem;
+  }
+  .partner-group {
+    background: white; border-radius: 24px; padding: 2rem;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+  .partner-group-title {
+    font-family: 'Syne', sans-serif; font-size: 0.85rem;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+    color: var(--green-bright); margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem; border-bottom: 1px solid rgba(82,183,136,0.2);
+  }
+  .partner-item {
+    display: flex; align-items: flex-start; gap: 1rem;
+    margin-bottom: 1.2rem;
+  }
+  .partner-item:last-child { margin-bottom: 0; }
+  .partner-dot {
+    width: 36px; height: 36px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+  }
+  .partner-dot.core { background: rgba(45,106,79,0.12); }
+  .partner-dot.support { background: rgba(166,124,82,0.12); }
+  .partner-info h4 { font-size: 0.95rem; font-weight: 600; color: var(--dark); }
+  .partner-info p { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.15rem; }
+
+  /* ─── ABOUT / MISSION ─── */
+  #about {
+    background: var(--dark);
+    color: white;
+    position: relative; overflow: hidden;
+  }
+  #about::before {
+    content: 'SILAR';
+    position: absolute; right: -2%; top: 50%; transform: translateY(-50%);
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(8rem, 18vw, 18rem);
+    font-weight: 800; color: rgba(82,183,136,0.05);
+    line-height: 1; pointer-events: none; user-select: none;
+  }
+  #about .section-tag { color: var(--green-light); }
+  #about .section-title { color: white; }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; align-items: center; margin-top: 3rem;
+  }
+  .about-desc { font-size: 1rem; line-height: 1.8; color: rgba(255,255,255,0.65); font-weight: 300; }
+  .about-values { display: flex; flex-direction: column; gap: 1.2rem; }
+  .value-item {
+    display: flex; gap: 1rem; align-items: flex-start;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(82,183,136,0.15);
+    border-radius: 16px; padding: 1.2rem;
+  }
+  .value-icon { font-size: 1.5rem; }
+  .value-item h4 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem; }
+  .value-item p { font-size: 0.85rem; color: rgba(255,255,255,0.5); }
+
+  /* ─── CTA ─── */
+  #cta {
+    background: var(--green-mid);
+    text-align: center; padding: 5rem 5%;
+    position: relative; overflow: hidden;
+  }
+  #cta::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 80% at 50% 50%, rgba(82,183,136,0.3), transparent);
+  }
+  #cta .section-title { color: white; margin-bottom: 1rem; }
+  #cta .section-desc { color: rgba(255,255,255,0.75); margin: 0 auto 2.5rem; text-align: center; }
+  .cta-buttons {
+    display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;
+    position: relative; z-index: 1;
+  }
+  .btn-white {
+    background: white; color: var(--green-mid);
+    padding: 0.9rem 2rem; border-radius: 50px;
+    font-size: 1rem; font-weight: 600;
+    text-decoration: none; transition: all 0.25s;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+  .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+  .btn-outline-white {
+    background: transparent; color: white;
+    padding: 0.9rem 2rem; border-radius: 50px;
+    font-size: 1rem; font-weight: 500;
+    text-decoration: none; transition: all 0.25s;
+    border: 2px solid rgba(255,255,255,0.6);
+    display: inline-flex; align-items: center; gap: 0.5rem;
+  }
+  .btn-outline-white:hover { background: rgba(255,255,255,0.15); border-color: white; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--dark); color: rgba(255,255,255,0.5);
+    padding: 3rem 5% 2rem;
+  }
+  .footer-inner {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.08); padding-top: 2rem;
+  }
+  .footer-logo {
+    font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800;
+    color: white; letter-spacing: -1px;
+  }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a {
+    color: rgba(255,255,255,0.5); text-decoration: none;
+    font-size: 0.85rem; transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--green-bright); }
+  .footer-copy { font-size: 0.8rem; text-align: center; width: 100%; margin-top: 1.5rem; }
+
+  /* Social icons in footer */
+  .social-links { display: flex; gap: 1rem; }
+  .social-link {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center;
+    color: white; text-decoration: none; font-size: 1rem;
+    transition: all 0.25s;
+  }
+  .social-link:hover { background: var(--green-bright); transform: scale(1.1); }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .fade-in {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── HAMBURGER ─── */
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 24px; height: 2px; background: var(--green-mid); border-radius: 2px; transition: all 0.3s; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    .about-grid, .partners-cols { grid-template-columns: 1fr; gap: 2rem; }
+    .hero-stats { gap: 1.5rem; }
+    .hero-circles { display: none; }
+  }
+
+  /* ─── FLOATING PARTICLES ─── */
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.15;
+    animation: float linear infinite;
+    pointer-events: none;
+  }
+  @keyframes float {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0.15; }
+    50% { opacity: 0.25; }
+    100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav id="navbar">
+  <div class="nav-logo">SI<span>LAR</span></div>
+  <ul class="nav-links">
+    <li><a href="#how">Cara Kerja</a></li>
+    <li><a href="#products">Produk</a></li>
+    <li><a href="#customers">Pelanggan</a></li>
+    <li><a href="#partners">Mitra</a></li>
+    <li><a href="#about">Tentang</a></li>
+  </ul>
+  <a href="https://wa.me/6281290100641" target="_blank" class="nav-cta">Hubungi Kami 💬</a>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <!-- Decorative SVG circle cluster -->
+  <svg class="hero-circles" viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="210" cy="210" r="200" stroke="rgba(82,183,136,0.12)" stroke-width="1.5"/>
+    <circle cx="210" cy="210" r="155" stroke="rgba(82,183,136,0.18)" stroke-width="1.5"/>
+    <circle cx="210" cy="210" r="110" stroke="rgba(82,183,136,0.25)" stroke-width="2"/>
+    <circle cx="210" cy="210" r="70" fill="rgba(82,183,136,0.08)" stroke="rgba(82,183,136,0.3)" stroke-width="2"/>
+    <text x="50%" y="53%" text-anchor="middle" dominant-baseline="middle" fill="rgba(45,106,79,0.7)" font-family="Syne,sans-serif" font-size="52" font-weight="800">♻</text>
+    <!-- Orbiting dots -->
+    <circle cx="210" cy="10" r="6" fill="rgba(82,183,136,0.5)" style="transform-origin:210px 210px;animation:spin-slow 8s linear infinite;"/>
+    <circle cx="210" cy="410" r="4" fill="rgba(166,124,82,0.5)" style="transform-origin:210px 210px;animation:spin-slow 12s linear infinite reverse;"/>
+    <circle cx="10" cy="210" r="5" fill="rgba(149,213,178,0.6)" style="transform-origin:210px 210px;animation:spin-slow 10s linear infinite;"/>
+  </svg>
+
+  <div class="hero-content">
+    <div class="hero-badge">Ekonomi Sirkular · Zero Waste</div>
+    <h1>Limbah Organik jadi <em>Nilai</em><br>Ekonomi <span class="earth">Berkelanjutan</span></h1>
+    <p class="hero-desc">SILAR mengubah sampah makanan UMKM, kantin kampus, dan konsumsi sehari-hari menjadi produk bernilai melalui budidaya maggot BSF dan platform digital terintegrasi.</p>
+    <div class="hero-actions">
+      <a href="#how" class="btn-primary">Lihat Cara Kerja →</a>
+      <a href="https://www.instagram.com/silar.p2mw?igsh=MWtxODZrejFtbmJqNQ%3D%3D&utm_source=qr" target="_blank" class="btn-secondary">📸 Follow Instagram</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">3+</div>
+        <div class="stat-label">Produk Utama</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">360°</div>
+        <div class="stat-label">Model Ekonomi Sirkular</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">0</div>
+        <div class="stat-label">Limbah Terbuang</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── HOW IT WORKS ─── -->
+<section id="how">
+  <p class="section-tag fade-in">Proses</p>
+  <h2 class="section-title fade-in">Bagaimana SILAR Bekerja?</h2>
+  <p class="section-desc fade-in">Dari pengumpulan limbah hingga produk siap jual — semua terhubung dalam satu ekosistem yang efisien dan ramah lingkungan.</p>
+  <div class="steps">
+    <div class="step fade-in">
+      <div class="step-num">01</div>
+      <div class="step-icon">🚛</div>
+      <h3>Pengumpulan Limbah</h3>
+      <p>Sistem pickup terjadwal dan collection point di area kampus serta mitra UMKM untuk mengumpulkan limbah organik secara konsisten.</p>
+    </div>
+    <div class="step fade-in">
+      <div class="step-num">02</div>
+      <div class="step-icon">🐛</div>
+      <h3>Biokonversi Maggot</h3>
+      <p>Limbah diurai secara efisien menggunakan larva BSF (Black Soldier Fly) yang mampu memproses organik dengan cepat dan ramah lingkungan.</p>
+    </div>
+    <div class="step fade-in">
+      <div class="step-num">03</div>
+      <div class="step-icon">📦</div>
+      <h3>Produksi & Pengemasan</h3>
+      <p>Maggot hidup, maggot kering, dan kasgot (pupuk) diproduksi, diproses, dan dikemas siap untuk dipasarkan ke konsumen.</p>
+    </div>
+    <div class="step fade-in">
+      <div class="step-num">04</div>
+      <div class="step-icon">🌐</div>
+      <h3>Platform Digital</h3>
+      <p>Website dan media sosial sebagai marketplace, sarana edukasi zero waste, serta penghubung antara penyedia limbah dan konsumen produk.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PRODUCTS ─── -->
+<section id="products">
+  <p class="section-tag fade-in">Produk Kami</p>
+  <h2 class="section-title fade-in">Dari Alam, Untuk Alam</h2>
+  <p class="section-desc fade-in">Setiap produk SILAR adalah bukti bahwa limbah dapat bertransformasi menjadi sumber daya yang bernilai tinggi.</p>
+  <div class="products-grid">
+    <div class="product-card fade-in">
+      <div class="product-emoji">🪲</div>
+      <h3>Maggot Hidup</h3>
+      <p>Pakan segar bergizi tinggi untuk budidaya ikan dan unggas. Kaya protein alami, disukai peternak sebagai alternatif pakan hemat.</p>
+      <span class="product-tag">Pakan Ternak</span>
+    </div>
+    <div class="product-card fade-in">
+      <div class="product-emoji">🫙</div>
+      <h3>Maggot Kering</h3>
+      <p>Maggot yang telah dikeringkan untuk kemudahan penyimpanan dan distribusi. Tahan lama, kandungan nutrisi tetap terjaga optimal.</p>
+      <span class="product-tag">Pakan Alternatif</span>
+    </div>
+    <div class="product-card fade-in">
+      <div class="product-emoji">🌿</div>
+      <h3>Kasgot (Pupuk)</h3>
+      <p>Pupuk organik berkualitas dari sisa metabolisme maggot (kascing). Kaya unsur hara, cocok untuk pertanian dan perkebunan organik.</p>
+      <span class="product-tag">Pertanian Organik</span>
+    </div>
+    <div class="product-card fade-in">
+      <div class="product-emoji">🎓</div>
+      <h3>Edukasi & Workshop</h3>
+      <p>Program workshop pengolahan sampah dan hidup sehat zero waste untuk komunitas, kampus, dan kelompok masyarakat peduli lingkungan.</p>
+      <span class="product-tag">Edukasi Komunitas</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CUSTOMERS ─── -->
+<section id="customers">
+  <p class="section-tag fade-in">Target Pelanggan</p>
+  <h2 class="section-title fade-in">Siapa yang Kami Layani?</h2>
+  <div class="customers-grid">
+    <div class="customer-card fade-in">
+      <div class="customer-icon">🐟</div>
+      <h3>Peternak Ikan & Unggas</h3>
+      <p>Solusi pakan protein tinggi dengan harga lebih terjangkau dibanding pakan konvensional.</p>
+    </div>
+    <div class="customer-card fade-in">
+      <div class="customer-icon">🌱</div>
+      <h3>Pekebun & Petani</h3>
+      <p>Pupuk organik kasgot untuk menyuburkan tanah dan meningkatkan hasil panen secara alami.</p>
+    </div>
+    <div class="customer-card fade-in">
+      <div class="customer-icon">🌍</div>
+      <h3>Individu Peduli Lingkungan</h3>
+      <p>Bagi siapa pun yang ingin berkontribusi nyata pada gaya hidup zero waste dan lingkungan bersih.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PARTNERS ─── -->
+<section id="partners">
+  <p class="section-tag fade-in">Ekosistem Mitra</p>
+  <h2 class="section-title fade-in">Dibangun Bersama Komunitas</h2>
+  <p class="section-desc fade-in">SILAR tumbuh melalui kolaborasi lintas sektor — dari pelaku usaha hingga komunitas sosial.</p>
+  <div class="partners-cols">
+    <div class="partner-group fade-in">
+      <div class="partner-group-title">🔑 Mitra Inti</div>
+      <div class="partner-item">
+        <div class="partner-dot core">🐓</div>
+        <div class="partner-info">
+          <h4>Peternak</h4>
+          <p>Mitra pembelian rutin maggot hidup dan kering sebagai pakan ternak berkualitas.</p>
+        </div>
+      </div>
+      <div class="partner-item">
+        <div class="partner-dot core">🍽️</div>
+        <div class="partner-info">
+          <h4>UMKM, Restoran & Hotel</h4>
+          <p>Supplier utama limbah organik makanan yang menjadi bahan baku proses biokonversi.</p>
+        </div>
+      </div>
+    </div>
+    <div class="partner-group fade-in">
+      <div class="partner-group-title">🤝 Mitra Pendukung</div>
+      <div class="partner-item">
+        <div class="partner-dot support">🌿</div>
+        <div class="partner-info">
+          <h4>NGO Lingkungan</h4>
+          <p>Kolaborasi dengan NGO Surabaya yang fokus di isu lingkungan untuk memperluas dampak sosial.</p>
+        </div>
+      </div>
+      <div class="partner-item">
+        <div class="partner-dot support">👥</div>
+        <div class="partner-info">
+          <h4>Karang Taruna</h4>
+          <p>Sumber daya manusia dan penggerak komunitas lokal untuk operasional dan distribusi.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ABOUT ─── -->
+<section id="about">
+  <p class="section-tag fade-in">Tentang SILAR</p>
+  <h2 class="section-title fade-in">Misi Kami</h2>
+  <div class="about-grid">
+    <div>
+      <p class="about-desc fade-in">
+        SILAR (Sistem Inovasi Limbah Organik Berbasis Ekonomi Sirkular) hadir sebagai jawaban atas tingginya volume limbah makanan yang dihasilkan UMKM, kantin kampus, dan aktivitas konsumsi sehari-hari yang belum terkelola optimal.
+      </p>
+      <br><br>
+      <p class="about-desc fade-in">
+        Dengan mengintegrasikan aspek lingkungan, ekonomi, dan teknologi, kami tidak hanya mengurangi permasalahan limbah organik, tetapi juga menciptakan peluang ekonomi baru yang berkelanjutan dan dapat direplikasi di berbagai wilayah.
+      </p>
+    </div>
+    <div class="about-values">
+      <div class="value-item fade-in">
+        <div class="value-icon">🌱</div>
+        <div>
+          <h4>Lingkungan</h4>
+          <p>Mengurangi pencemaran dari limbah organik dengan solusi biokonversi yang efisien dan alami.</p>
+        </div>
+      </div>
+      <div class="value-item fade-in">
+        <div class="value-icon">💡</div>
+        <div>
+          <h4>Ekonomi Sirkular</h4>
+          <p>Mengubah limbah menjadi produk bernilai tinggi, menciptakan siklus ekonomi yang tidak membuang sumber daya.</p>
+        </div>
+      </div>
+      <div class="value-item fade-in">
+        <div class="value-icon">📱</div>
+        <div>
+          <h4>Teknologi Digital</h4>
+          <p>Platform marketplace dan edukasi yang menghubungkan seluruh pemangku kepentingan dalam satu ekosistem.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA ─── -->
+<section id="cta">
+  <p class="section-tag" style="color:rgba(255,255,255,0.5);text-align:center;">Mulai Sekarang</p>
+  <h2 class="section-title fade-in">Bergabung dengan Gerakan<br>Zero Waste SILAR</h2>
+  <p class="section-desc fade-in">Hubungi kami untuk menjadi mitra, pelanggan, atau sekadar ingin tahu lebih banyak tentang bagaimana kita bisa mengubah limbah jadi berkah bersama.</p>
+  <div class="cta-buttons">
+    <a href="https://wa.me/6281290100641" target="_blank" class="btn-white">💬 Chat via WhatsApp</a>
+    <a href="https://www.instagram.com/silar.p2mw?igsh=MWtxODZrejFtbmJqNQ%3D%3D&utm_source=qr" target="_blank" class="btn-outline-white">📸 Follow @silar.p2mw</a>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">SILAR</div>
+    <div class="footer-links">
+      <a href="#how">Cara Kerja</a>
+      <a href="#products">Produk</a>
+      <a href="#partners">Mitra</a>
+      <a href="#about">Tentang</a>
+    </div>
+    <div class="social-links">
+      <a href="https://www.instagram.com/silar.p2mw?igsh=MWtxODZrejFtbmJqNQ%3D%3D&utm_source=qr" target="_blank" class="social-link" title="Instagram SILAR">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </a>
+      <a href="https://wa.me/6281290100641" target="_blank" class="social-link" title="WhatsApp SILAR">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="footer-copy">© 2025 SILAR — Sistem Inovasi Limbah Organik Berbasis Ekonomi Sirkular. All rights reserved.</div>
+</footer>
+
+<script>
+  // Intersection Observer for fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Nav scroll effect
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    nav.style.padding = window.scrollY > 50 ? '0.8rem 5%' : '1.2rem 5%';
+  });
+
+  // Hamburger menu (mobile)
+  function toggleMenu() {
+    const links = document.querySelector('.nav-links');
+    const cta = document.querySelector('.nav-cta');
+    const open = links.style.display === 'flex';
+    if (open) {
+      links.style.display = 'none';
+      if (cta) cta.style.display = 'none';
+    } else {
+      links.style.cssText = 'display:flex;flex-direction:column;position:absolute;top:70px;left:0;right:0;background:rgba(248,244,236,0.98);padding:1.5rem 5%;gap:1.2rem;border-bottom:1px solid rgba(82,183,136,0.2);backdrop-filter:blur(16px);z-index:99;';
+    }
+  }
+</script>
+</body>
+</html>
